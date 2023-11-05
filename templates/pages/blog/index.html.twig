@@ -9,8 +9,11 @@
     </h1>
     <div class="flex flex-row flex-wrap justify-evenly mt-8">
        {% for post in posts %}
-           {% include "components/_card.html.twig" %}
+           {% include "components/_card.html.twig" with {post: post} only %}
        {% endfor %} 
+    </div>
+    <div class="navigation flex justify-center mb-8 text-2xl">
+      {{ knp_pagination_render(posts) }}
     </div>
    </div>
 {% endblock %}
