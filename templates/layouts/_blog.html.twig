@@ -12,9 +12,12 @@
         {{ title }}
     </h1>
 
-    {% include "components/_dropdown.html.twig" with {
-        options: allCategories,
-    } %}
+    {% if allCategories is defined %}
+        {% include "components/_dropdown.html.twig" with {
+            options: allCategories,
+        } %}
+    {% endif %}
+    
     <div class="flex flex-row flex-wrap justify-evenly mt-8">
        {% for post in posts %}
            {% include "components/_card.html.twig" with {post: post} only %}

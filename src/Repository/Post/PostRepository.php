@@ -2,8 +2,9 @@
 
 namespace App\Repository\Post;
 
-use App\Entity\Post\Category;
+use App\Entity\Post\Tag;
 use App\Entity\Post\Post;
+use App\Entity\Post\Category;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -29,22 +30,32 @@ class PostRepository extends ServiceEntityRepository
 
     /**
      * Get all published posts
-     * 
+     * @param ?Category $category
+     * @param ?Tag $tag
      * @param int $page
      * @return PaginationInterface
      */
-    public function findPublished(int $page, ?Category $category = null): PaginationInterface
+    public function findPublished(int $page,
+     ?Category $category = null,
+     ?Tag $tag = null): PaginationInterface
     {
         $data =  $this->createQueryBuilder('p')
-        ->join('p.categories', 'c')
         ->where('p.state = :state')
         ->setParameter('state', Post::STATES[1])
         ->addOrderBy('p.createdAt', 'DESC');
        
         if(isset($category)) {
             $data = $data
+                ->join('p.categories', 'c')
                 ->andWhere(':category in (c)')
                 ->setParameter('category', $category);
+        }
+
+        if(isset($tag)) {
+            $data = $data
+                ->join('p.tags', 't')
+                ->andWhere(':tag in (t)')
+                ->setParameter('tag', $tag);
         }
 
         $data ->getQuery()
