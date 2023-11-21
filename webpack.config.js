@@ -11,7 +11,7 @@ Encore
   .setOutputPath("public/build/")
   // public path used by the web server to access the output path
   .setPublicPath("/build")
-  // only needed for CDN's or subdirectory deploy
+  // only needed for CDN's or sub-directory deploy
   //.setManifestKeyPrefix('build/')
 
   /*
@@ -32,11 +32,7 @@ Encore
   // but, you probably want this, unless you're building a single-page app
   .enableSingleRuntimeChunk()
 
-  .enablePostCssLoader((options) => {
-    options.postcssOptions = {
-      path: "./postcss.config.js",
-    };
-  })
+  .enablePostCssLoader()
 
   /*
    * FEATURE CONFIG
@@ -51,16 +47,17 @@ Encore
   // enables hashed filenames (e.g. app.abc123.css)
   .enableVersioning(Encore.isProduction())
 
-  // configure Babel
-  // .configureBabel((config) => {
-  //     config.plugins.push('@babel/a-babel-plugin');
-  // })
+  .configureBabel((config) => {
+    config.plugins.push("@babel/plugin-proposal-class-properties");
+  })
 
-  // enables and configure @babel/preset-env polyfills
+  // enables @babel/preset-env polyfills
   .configureBabelPresetEnv((config) => {
     config.useBuiltIns = "usage";
-    config.corejs = "3.23";
-  });
+    config.corejs = 3;
+  })
+
+ 
 
 // enables Sass/SCSS support
 //.enableSassLoader()

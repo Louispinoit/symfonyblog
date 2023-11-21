@@ -88,9 +88,14 @@ class PostRepository extends ServiceEntityRepository
                     ->andWhere('p.title LIKE :q')
                     ->orWhere('t.name LIKE :q')
                     ->setParameter('q', "%{$searchData->q}%");
-                
-                    
+            }
 
+            if (!empty($searchData->categories)) {
+                // Search on post title
+                $data = $data
+                    ->join('p.categories', 'c')
+                    ->andWhere('c.id IN (:categories)')
+                    ->setParameter('categories', $searchData->categories);
             }
 
             $data = $data
