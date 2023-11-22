@@ -10,6 +10,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+//
 class SearchType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -18,7 +19,9 @@ class SearchType extends AbstractType
             ->add('q', TextType::class, [
                 'attr' => [
                     'placeholder' => 'Recherche via un mot clé...'
-                ]
+                ],
+                'required' => false,
+                'empty_data' => ''
                 ])
             ->add('categories', EntityType::class, [
                 'class' => Category::class,
