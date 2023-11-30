@@ -62,6 +62,9 @@ class Post
     #[JoinTable('user_post_like')]
     private Collection $likes;
 
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true)]
+    private Collection $comments;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -69,6 +72,7 @@ class Post
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->likes = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -256,4 +260,30 @@ class Post
     {
         return $this->title;
     }
+
+
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComments(Comment $comments): self 
+    {
+        if (!$this->comments->contains($comments)) {
+            $this->comments[] = $comments;
+            $comments->setPost($this);
+        }
+        return $this;
+    }
+
+    public function removeComments(Comment $comments): self 
+    {
+        if ($this->comments->removeElement($comments)) {
+            if ($comments->getPost() === $this) {
+                $comments->setPost(null);
+            }
+        }
+        return $this;
+    }
+
 }
